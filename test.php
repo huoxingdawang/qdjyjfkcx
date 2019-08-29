@@ -17,4 +17,6 @@
 	echo "\n\n\n\n\n\n".'有效数据'.$ok.'条,共'.$cnt.'条,比例:'.($ok/$cnt*100)."%\n";
 	foreach($okdata as $buf)
 		printt($buf);
-	
+	$file=fopen("result.json", "w");
+	fwrite($file,json_encode($datas));
+	fclose($file);	
