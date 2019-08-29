@@ -4,7 +4,7 @@
 	$ok=0;
 	$okdata=[];
 	$datas=[];
-	for($i=0;$i<1000;$i++)
+	for($i=0;$i<=758;$i++)
 	{
 		$buf=chaxun('2017370201880230'.str_pad($i,3,"0",STR_PAD_LEFT));
 		$cnt++;
