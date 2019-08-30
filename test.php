@@ -4,9 +4,9 @@
 	$ok=0;
 	$okdata=[];
 	$datas=[];
-	for($i=0;$i<=800;$i++)
+	for($i=1;$i<=758;$i++)
 	{
-		$buf=chaxun('2018370201880130'.str_pad($i,3,"0",STR_PAD_LEFT));
+		$buf=chaxun('2017370201880230'.str_pad($i,3,"0",STR_PAD_LEFT));
 		$cnt++;
 		printt($buf);
 		$ok+=$buf->code;
