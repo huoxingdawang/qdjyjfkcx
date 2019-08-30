@@ -41,6 +41,15 @@
 		$st->bindValue(4,jry_wb_get_time());
 		$st->bindValue(5,$db[$i]['student_id']);
 		$st->execute();
+		foreach($one->logs as $log)
+		{
+			$st = $conn->prepare("INSERT INTO data.logs (`xjh`,`time`,`consumtype`,`amount`) VALUES (?,?,?,?)");
+			$st->bindValue(1,$one->student_id);
+			$st->bindValue(2,$log->time);
+			$st->bindValue(3,$log->consumtype);
+			$st->bindValue(4,$log->amount);
+			$st->execute();			
+		}
 		echo $one->name."\t\t".$db[$i]['student_id']."\t".$one->student_id."\n";
 		$i++;
 	}
