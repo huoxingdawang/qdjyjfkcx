@@ -4,7 +4,10 @@
 	{
 		$data=(object)[];
 		$data->student_id=$sno;
-		$ch=curl_init('http://27.221.57.108:10009/app/cardInfo');
+		if		($sno/100000%100==1)	{$port=10013;$data->school='qdyz';}//一中
+		else if	($sno/100000%100==2)	{$port=10009;$data->school='qdez';}//二中
+		else							{$port=10009;$data->school='????';}
+		$ch=curl_init('http://27.221.57.108:'.$port.'/app/cardInfo');
 		curl_setopt($ch,CURLOPT_HEADER, 0);    
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1); 
 		curl_setopt($ch,CURLOPT_FOLLOWLOCATION, 1);
@@ -21,7 +24,7 @@
 			$data->card_id=$stu->data->cardNo;
 			$data->amount=$stu->data->amount;
 			$data->logs=[];
-			$ch=curl_init('http://27.221.57.108:10009/app/trades');
+			$ch=curl_init('http://27.221.57.108:'.$port.'/app/trades');
 			curl_setopt($ch,CURLOPT_HEADER, 0);    
 			curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1); 
 			curl_setopt($ch,CURLOPT_FOLLOWLOCATION, 1);
@@ -38,7 +41,7 @@
 	{
 		if($data->code)
 		{
-			echo '学生'.$data->student_id."\t姓名:".$data->name."\t卡号:".$data->card_id."\t余额:".$data->amount."\n";
+			echo $data->school.'学生'.$data->student_id."\t姓名:".$data->name."\t卡号:".$data->card_id."\t余额:".$data->amount."\n";
 			echo '交易记录如下:(共'.count($data->logs)."条)\n";
 			foreach($data->logs as $log)
 				echo "\t".$data->name."\t".$log->time."\t".$log->consumtype."\t".$log->amount."元\n";
