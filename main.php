@@ -3,10 +3,11 @@
 	function chaxun($sno)
 	{
 		$data=(object)[];
-		$data->student_id=$sno;
-		if		($sno/100000%100==1)	{$port=10013;$data->school='qdyz';}//一中
-		else if	($sno/100000%100==2)	{$port=10009;$data->school='qdez';}//二中
-		else							{$port=10009;$data->school='????';}
+		$data->xjh=$sno;
+		if		($sno/100000%100==1)	$port=10013	;//一中
+		else if	($sno/100000%100==2)	$port=10009	;//二中
+		else if	($sno/100000%100==15)	$port=9000	;//十五中
+		else							$port=10009	;
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/cardInfo');
 		curl_setopt($ch,CURLOPT_HEADER, 0);    
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1); 
@@ -41,13 +42,13 @@
 	{
 		if($data->code)
 		{
-			echo $data->school.'学生'.$data->student_id."\t姓名:".$data->name."\t卡号:".$data->card_id."\t余额:".$data->amount."\n";
+			echo '学生'.$data->xjh."\t姓名:".$data->name."\t卡号:".$data->card_id."\t余额:".$data->amount."\n";
 			echo '交易记录如下:(共'.count($data->logs)."条)\n";
 			foreach($data->logs as $log)
-				echo "\t".$data->name."\t".$log->time."\t".$log->consumtype."\t".$log->amount."元\n";
+				echo "\t".$data->name."\t".$log->time."\t".$log->consumtype."\t".$log->amount."元\t".$log->mercname."\n";
 		}
 		else
-			echo '学生'.$data->student_id."\t没有绑定卡，嘤嘤嘤\n";
+			echo '学生'.$data->xjh."\t没有绑定卡，嘤嘤嘤\n";
 		
 	}
 	if(($_SERVER['PHP_SELF'])==(end(explode('\\',__FILE__))))
