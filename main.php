@@ -1,6 +1,6 @@
 <?php
 	error_reporting(0);
-	function chaxun($sno)
+	function chaxun($sno,$ps=1000,$pn=1)
 	{
 		$data=(object)[];
 		$data->xjh=$sno;
@@ -30,7 +30,7 @@
 			curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1); 
 			curl_setopt($ch,CURLOPT_FOLLOWLOCATION, 1);
 			curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type:application/json'));	
-			curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>$sno,'userType'=>0,'pageNum'=>1,'pageSize'=>1000)));	
+			curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>$sno,'userType'=>0,'pageNum'=>$pn,'pageSize'=>$ps)));	
 			$get_sorce=curl_exec($ch);	
 			$card=json_decode($get_sorce);
 			foreach($card->data->trades as $trade)
@@ -38,11 +38,13 @@
 		}
 		return $data;
 	}
-	function printt($data)
+	function printt($data,$logs=true)
 	{
 		if($data->code)
 		{
 			echo '学生'.$data->xjh."\t姓名:".$data->name."\t卡号:".$data->card_id."\t余额:".$data->amount."\n";
+			if(!$logs)
+				return;
 			echo '交易记录如下:(共'.count($data->logs)."条)\n";
 			foreach($data->logs as $log)
 				echo "\t".$data->name."\t".$log->time."\t".$log->consumtype."\t".$log->amount."元\t".$log->mercname."\n";
