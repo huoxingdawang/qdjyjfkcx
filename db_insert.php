@@ -11,15 +11,17 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 		$delta_log=0;
 		if($stu->xjh!=''&&$stu->name!=''&&$stu->card_id!=''&&$stu->amount!='')
 		{
-			$st = $conn->prepare("INSERT INTO qiafan.student (`xjh`,`name`,`card_id`,`amount`,`lasttime`) VALUES (?,?,?,?,?) ON DUPLICATE KEY UPDATE lasttime=IF(amount=?,lasttime,?),amount=?; ");
+			$st = $conn->prepare("INSERT INTO qiafan.student (`xjh`,`name`,`card_id`,`amount`,`lasttime`,`lasttime_query`) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE lasttime=IF(amount=?,lasttime,?),amount=?,lasttime_query=?;");
 			$st->bindValue(1,$stu->xjh);
 			$st->bindValue(2,$stu->name);
 			$st->bindValue(3,$stu->card_id);
 			$st->bindValue(4,$stu->amount);
 			$st->bindValue(5,jry_wb_get_time());
-			$st->bindValue(6,$stu->amount);
-			$st->bindValue(7,jry_wb_get_time());
-			$st->bindValue(8,$stu->amount);
+			$st->bindValue(6,jry_wb_get_time());
+			$st->bindValue(7,$stu->amount);
+			$st->bindValue(8,jry_wb_get_time());
+			$st->bindValue(9,$stu->amount);
+			$st->bindValue(10,jry_wb_get_time());
 			$st->execute();
 			foreach($stu->logs as $log)
 			{
