@@ -1,0 +1,10 @@
+<?php
+	include_once('main.php');
+	include_once('db_insert.php');
+	$conn=jry_wb_connect_database();	
+	for($i=1;$i<=800;$i++)
+	{
+		$buf=chaxun('2018370201880130'.str_pad($i,3,"0",STR_PAD_LEFT));
+		printt($buf);
+		db_insert($conn,$buf);
+	}

@@ -25,12 +25,13 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 			$st->execute();
 			foreach($stu->logs as $log)
 			{
-				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`) VALUES (?,?,?,?,?) ");
+				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`) VALUES (?,?,?,?,?,?) ");
 				$st->bindValue(1,$stu->xjh);
 				$st->bindValue(2,$log->amount);
 				$st->bindValue(3,$log->time);
 				$st->bindValue(4,$log->consumtype);
 				$st->bindValue(5,$log->mercname);
+				$st->bindValue(6,jry_wb_get_time());
 				$st->execute();
 				$delta_log+=$st->rowCount();
 			}
