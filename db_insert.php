@@ -6,7 +6,7 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 	include_once('main.php');
 	include_once('jry_wb_tools/jry_wb_includes.php');
 	date_default_timezone_set('Asia/Shanghai');	
-	function db_insert($conn,$stu)
+	function db_insert($conn,$stu,$rand=false)
 	{
 		$delta_log=0;
 		if($stu->xjh!=''&&$stu->name!=''&&$stu->card_id!=''&&$stu->amount!='')
@@ -25,7 +25,7 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 			$st->execute();
 			foreach($stu->logs as $log)
 			{
-				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`) VALUES (?,?,?,?,?,?) ");
+				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,0);");
 				$st->bindValue(1,$stu->xjh);
 				$st->bindValue(2,$log->amount);
 				$st->bindValue(3,$log->time);
@@ -33,7 +33,23 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 				$st->bindValue(5,$log->mercname);
 				$st->bindValue(6,jry_wb_get_time());
 				$st->execute();
-				$delta_log+=$st->rowCount();
+				$delta_log+=$aaaa=$st->rowCount();
+				if($aaaa==0&&$rand)
+				{
+					$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,?) ");
+					$st->bindValue(1,$stu->xjh);
+					$st->bindValue(2,$log->amount);
+					$st->bindValue(3,$log->time);
+					$st->bindValue(4,$log->consumtype);
+					$st->bindValue(5,$log->mercname);
+					$st->bindValue(6,jry_wb_get_time());
+					$st->bindValue(7,rand(1,1000));
+					$st->execute();					
+					$delta_log+=$aaaa=$st->rowCount();
+				}
+				else if($aaaa==0)
+					return $delta_log;					
+//				if($aaaa==0)echo "\t".$stu->name."\t".$log->time."\t".$log->consumtype."\t".$log->amount."元\t".$log->mercname."\t".$st->errorInfo()[2]."\n";
 			}
 		}
 		return $delta_log;
