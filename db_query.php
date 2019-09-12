@@ -14,6 +14,8 @@
 	$delta_log=0;
 	$ps=10;
 	$i=0;
+	function msectime(){list($msec, $sec) = explode(' ', microtime());return (float)sprintf('%.0f',(floatval($msec)+floatval($sec))*1000);}
+	$start=msectime();
 	foreach($data as $one)
 	{
 		$pn=1;
@@ -26,7 +28,7 @@
 			$pn++;
 		}
 		$i++;
-		echo jry_wb_php_cli_color(round(($i/$cnt)*100,4)."%\n","green");
+		echo jry_wb_php_cli_color(round(($i/$cnt)*100,4)."%\t","green").jry_wb_php_cli_color(((msectime()-$start)/1000)."s\t","red").jry_wb_php_cli_color(((msectime()-$start)/($i/$cnt)*(1-($i/$cnt))/1000)."s left\n","light_green");
 	}
 	echo $delta_log." logs insert\n";
 	$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`amount_logs`=ROUND(IFNULL((SELECT SUM(`qiafan`.`logs`.`amount`) FROM `qiafan`.`logs` WHERE `qiafan`.`logs`.`xjh`=`qiafan`.`student`.`xjh`),0),2);");
