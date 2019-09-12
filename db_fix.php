@@ -5,7 +5,7 @@
 	$conn=jry_wb_connect_database();	
 	$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`amount_logs`=ROUND(IFNULL((SELECT SUM(`qiafan`.`logs`.`amount`) FROM `qiafan`.`logs` WHERE `qiafan`.`logs`.`xjh`=`qiafan`.`student`.`xjh`),0),2);");
 	$st->execute();
-	$st=$conn->prepare("SELECT * FROM `qiafan`.`student` WHERE `amount`!=`amount_logs`");
+	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE `amount`!=`amount_logs`");
 	$st->execute();
 	$data=$st->fetchAll();
 	echo ($cnt=count($data))." student's logs will be fixed\n";
@@ -23,7 +23,7 @@
 		$buff=$ps;
 		while($buff>=$ps)
 		{
-			$buf=chaxun($one['xjh'],$ps,$pn);
+			$buf=chaxun($one['xjh'],$ps,$pn,getport($one['school']));
 			$delta_log+=$buff=db_insert($conn,$buf,true);
 			echo $buf->xjh."\t".$buf->name.jry_wb_php_cli_color("\tpage:".$pn,'yellow')."\t".jry_wb_php_cli_color($buff." logs insert\n",'cyan');	
 			$pn++;
@@ -36,9 +36,7 @@
 		echo jry_wb_php_cli_color(round(($i/$cnt)*100,4)."%\n","green");
 	}
 	echo $delta_log." logs insert\n";
-	$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`amount_abs`=ROUND(IFNULL((SELECT SUM(ABS(`qiafan`.`logs`.`amount`)) FROM `qiafan`.`logs` WHERE `qiafan`.`logs`.`xjh`=`qiafan`.`student`.`xjh`),0),2);");
-	$st->execute();
-	$st=$conn->prepare("SELECT * FROM `qiafan`.`student` WHERE `amount`!=`amount_logs`");
+	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE `amount`!=`amount_logs`");
 	$st->execute();
 	$data=$st->fetchAll();
 	echo ($cnt=count($data))." unfixed logs\n";	

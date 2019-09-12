@@ -7,7 +7,7 @@
 	{
 		$pn=1;
 		$buff=$ps;
-		echo ($xjh='2017370201880930'.str_pad($i,3,"0",STR_PAD_LEFT))."\n";
+		echo ($xjh='2018370201881930'.str_pad($i,3,"0",STR_PAD_LEFT))."\n";
 		while($buff>=$ps)
 		{
 			$buf=chaxun($xjh,$ps,$pn);

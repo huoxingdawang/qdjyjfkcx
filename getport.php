@@ -1,6 +1,6 @@
 <?php
 	echo ($xjh=$argv[1])."\n"; 
-	for($port=10015;$port<0XFFFF;$port++)
+	for($port=9997;$port<0XFFFF;$port++)
 	{
 		echo "try ".$port."\n";
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/cardInfo');
