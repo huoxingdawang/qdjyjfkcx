@@ -6,10 +6,9 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 	include_once('main.php');
 	include_once('jry_wb_tools/jry_wb_includes.php');
 	date_default_timezone_set('Asia/Shanghai');	
-	function db_insert($conn,$stu,$rand=false)
+	function db_insert_student($conn,$stu)
 	{
-		$delta_log=0;
-		if($stu->xjh!=''&&$stu->name!=''&&$stu->card_id!=''&&$stu->amount!='')
+		if($stu->xjh!==NULL&&$stu->name!==NULL&&$stu->card_id!==NULL&&$stu->amount!==NULL)
 		{
 			$st = $conn->prepare("INSERT INTO qiafan.student (`xjh`,`name`,`card_id`,`amount`,`lasttime`,`lasttime_query`) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE lasttime=IF(amount=?,lasttime,?),amount=?,lasttime_query=?;");
 			$st->bindValue(1,$stu->xjh);
@@ -23,36 +22,65 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 			$st->bindValue(9,$stu->amount);
 			$st->bindValue(10,jry_wb_get_time());
 			$st->execute();
-			foreach($stu->logs as $log)
+		}			
+	}
+	function db_insert_logs($conn,$logs,$rand=false)
+	{
+		$delta_log=0;
+		foreach($logs as $log)
+		{
+			$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,0);");
+			$st->bindValue(1,$stu->xjh);
+			$st->bindValue(2,$log->amount);
+			$st->bindValue(3,$log->time);
+			$st->bindValue(4,$log->consumtype);
+			$st->bindValue(5,$log->mercname);
+			$st->bindValue(6,jry_wb_get_time());
+			$st->execute();
+			$delta_log+=$aaaa=$st->rowCount();
+			if($aaaa==0&&$rand)
 			{
-				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,0);");
+				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,?) ");
 				$st->bindValue(1,$stu->xjh);
 				$st->bindValue(2,$log->amount);
 				$st->bindValue(3,$log->time);
 				$st->bindValue(4,$log->consumtype);
 				$st->bindValue(5,$log->mercname);
 				$st->bindValue(6,jry_wb_get_time());
-				$st->execute();
+				$st->bindValue(7,rand(1,1000));
+				$st->execute();					
 				$delta_log+=$aaaa=$st->rowCount();
-				if($aaaa==0&&$rand)
-				{
-					$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,?) ");
-					$st->bindValue(1,$stu->xjh);
-					$st->bindValue(2,$log->amount);
-					$st->bindValue(3,$log->time);
-					$st->bindValue(4,$log->consumtype);
-					$st->bindValue(5,$log->mercname);
-					$st->bindValue(6,jry_wb_get_time());
-					$st->bindValue(7,rand(1,1000));
-					$st->execute();					
-					$delta_log+=$aaaa=$st->rowCount();
-				}
-				else if($aaaa==0)
-					return $delta_log;					
-//				if($aaaa==0)echo "\t".$stu->name."\t".$log->time."\t".$log->consumtype."\t".$log->amount."元\t".$log->mercname."\t".$st->errorInfo()[2]."\n";
 			}
-		}
-		return $delta_log;
+			else if($aaaa==0)
+				return $delta_log;					
+		}		
+		return $delta_log;					
+	}
+	function db_insert_extern($conn,$stu)
+	{
+		if($stu->xjh!==NULL&&$stu->bankcard!==NULL&&$stu->china_id_card!==NULL&&$stu->birthday!==NULL&&$stu->sex!==NULL&&$stu->birthday!==false&&$stu->sex!==false)
+		{
+			$st = $conn->prepare("UPDATE qiafan.student SET bankcard=?,china_id_card=?,birthday=?,sex=? WHERE xjh=?");
+			$st->bindValue(1,$stu->bankcard);
+			$st->bindValue(2,$stu->china_id_card);
+			$st->bindValue(3,$stu->birthday);
+			$st->bindValue(4,$stu->sex,PDO::PARAM_INT);
+			$st->bindValue(5,$stu->xjh);
+			$st->execute();
+			if($st->rowCount()==0)
+			{
+				var_dump($stu);
+				var_dump($st->errorInfo());
+				exit();
+			}
+		}	
+		else var_dump($stu);
+	}	
+	function db_insert($conn,$stu,$rand=false)
+	{
+		db_insert_student($conn,$stu);
+		db_insert_extern($conn,$stu);
+		return db_insert_logs($conn,$stu->logs,$rand);
 	}
 	if(($_SERVER['PHP_SELF'])==(end(explode('\\',__FILE__))))
 	{

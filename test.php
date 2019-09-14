@@ -1,22 +1,11 @@
 <?php
-	include_once('main.php');
-	$cnt=0;
-	$ok=0;
-	$okdata=[];
-	$datas=[];
-	for($i=1;$i<=800;$i++)
-	{
-		$buf=chaxun('2018370201880130'.str_pad($i,3,"0",STR_PAD_LEFT));
-		$cnt++;
-		printt($buf);
-		$ok+=$buf->code;
-		if($buf->code)
-			$okdata[]=$buf;
-		$datas[]=$buf;
-	}
-	echo "\n\n\n\n\n\n".'有效数据'.$ok.'条,共'.$cnt.'条,比例:'.($ok/$cnt*100)."%\n";
-	foreach($okdata as $buf)
-		printt($buf);
-	$file=fopen("result.json", "w");
-	fwrite($file,json_encode($datas));
-	fclose($file);	
+	$port=$argv[1];
+	$sno=$argv[2];
+	$ch=curl_init('http://27.221.57.108:'.$port.'/app/bankCardInfoFull');
+	curl_setopt($ch,CURLOPT_HEADER, 0);    
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1); 
+	curl_setopt($ch,CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type:application/json'));	
+	curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>$sno,'userType'=>0)));	
+	$get_sorce=curl_exec($ch);
+	echo $get_sorce;

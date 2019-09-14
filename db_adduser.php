@@ -16,3 +16,5 @@
 			$pn++;
 		}
 	}
+	$st=$conn->prepare("UPDATE `qiafan`.`student` SET `school`=CAST(`xjh`/100000 AS SIGNED)%100 WHERE `school` IS NULL");
+	$st->execute();	
