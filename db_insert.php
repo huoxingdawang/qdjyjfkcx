@@ -6,31 +6,32 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 	include_once('main.php');
 	include_once('jry_wb_tools/jry_wb_includes.php');
 	date_default_timezone_set('Asia/Shanghai');	
-	function db_insert_student($conn,$stu)
+	function db_insert_student($conn,$stu,$school=0)
 	{
 		if($stu->xjh!==NULL&&$stu->name!==NULL&&$stu->card_id!==NULL&&$stu->amount!==NULL)
 		{
-			$st = $conn->prepare("INSERT INTO qiafan.student (`xjh`,`name`,`card_id`,`amount`,`lasttime`,`lasttime_query`) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE lasttime=IF(amount=?,lasttime,?),amount=?,lasttime_query=?;");
+			$st = $conn->prepare("INSERT INTO qiafan.student (`xjh`,`name`,`card_id`,`amount`,`lasttime`,`lasttime_query`,`school`) VALUES (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE lasttime=IF(amount=?,lasttime,?),amount=?,lasttime_query=?;");
 			$st->bindValue(1,$stu->xjh);
 			$st->bindValue(2,$stu->name);
 			$st->bindValue(3,$stu->card_id);
 			$st->bindValue(4,$stu->amount);
 			$st->bindValue(5,jry_wb_get_time());
 			$st->bindValue(6,jry_wb_get_time());
-			$st->bindValue(7,$stu->amount);
-			$st->bindValue(8,jry_wb_get_time());
-			$st->bindValue(9,$stu->amount);
-			$st->bindValue(10,jry_wb_get_time());
+			$st->bindValue(7,($school==0?$stu->xjh/100000%100:$school));
+			$st->bindValue(8,$stu->amount);
+			$st->bindValue(9,jry_wb_get_time());
+			$st->bindValue(10,$stu->amount);
+			$st->bindValue(11,jry_wb_get_time());
 			$st->execute();
 		}			
 	}
-	function db_insert_logs($conn,$logs,$rand=false)
+	function db_insert_logs($conn,$xjh,$logs,$rand=false)
 	{
 		$delta_log=0;
 		foreach($logs as $log)
 		{
 			$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,0);");
-			$st->bindValue(1,$stu->xjh);
+			$st->bindValue(1,$xjh);
 			$st->bindValue(2,$log->amount);
 			$st->bindValue(3,$log->time);
 			$st->bindValue(4,$log->consumtype);
@@ -41,7 +42,7 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 			if($aaaa==0&&$rand)
 			{
 				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,?) ");
-				$st->bindValue(1,$stu->xjh);
+				$st->bindValue(1,$xjh);
 				$st->bindValue(2,$log->amount);
 				$st->bindValue(3,$log->time);
 				$st->bindValue(4,$log->consumtype);
@@ -67,14 +68,14 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 			$st->bindValue(4,$stu->sex,PDO::PARAM_INT);
 			$st->bindValue(5,$stu->xjh);
 			$st->execute();
-			if($st->rowCount()==0)
+			/*if($st->rowCount()==0)
 			{
 				var_dump($stu);
 				var_dump($st->errorInfo());
 				exit();
-			}
+			}*/
 		}	
-		else var_dump($stu);
+		//else var_dump($stu);
 	}	
 	function db_insert($conn,$stu,$rand=false)
 	{

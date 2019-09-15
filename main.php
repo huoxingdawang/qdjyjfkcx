@@ -7,7 +7,6 @@
 		else if	($school==2)	return 10009	;//二中
 		else if	($school==15)	return 9000		;//十五中
 		else if	($school==9)	return 10021	;//九中
-		else if	($school==25)	return 10009	;//二分
 		else if	($school==97)	return 10005	;//
 		else if	($school==39)	return 10017	;//39中
 		else if	($school==06)	return 10025	;//六中
