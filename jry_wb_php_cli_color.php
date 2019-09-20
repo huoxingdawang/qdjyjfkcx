@@ -1,7 +1,7 @@
 <?php
 	function jry_wb_php_cli_color($text,$color)
 	{
-//		return $text;
+		return $text;
 		$_colors = array( 
 			'light_red'=>"[1;31m",
 			'light_green'=>"[1;32m",

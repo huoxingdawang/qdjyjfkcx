@@ -8,8 +8,8 @@
 	
 	$start=msectime();
 	$conn=jry_wb_connect_database();	
-//	$file=fopen('result/'.date("Y-m-d H-i-s",time()).'.html', "w") or die("Unable to open file!".$filename);
-	$file=fopen('result/test.html', "w") or die("Unable to open file!".$filename);
+	$file=fopen('result/'.date("Y-m-d H-i-s",time()).'.html', "w") or die("Unable to open file!".$filename);
+//	$file=fopen('result/test.html', "w") or die("Unable to open file!".$filename);
 	fwrite($file,'<!DOCTYPE html PUBLIC >
 <html>
 	<head>
@@ -30,10 +30,9 @@
 	$stus=$st->fetchAll();
 	fwrite($file,'<span>包含'.($stucnt=count($stus)).'个学生,');	
 	echo ((msectime()-$start)/1000)."s passed(student loaded)\n";
-/*	$st=$conn->prepare("SELECT COUNT(xjh) FROM `qiafan`.`logs`");
+	$st=$conn->prepare("SELECT COUNT(xjh) FROM `qiafan`.`logs`");
 	$st->execute();
 	$logscnt=$st->fetchAll()[0][0];	
-*/
 	fwrite($file,''.$logscnt.'条记录</span>');	
 //学生分析
 	echo ((msectime()-$start)/1000)."s passed(logs loaded)\n";

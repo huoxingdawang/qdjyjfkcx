@@ -10,6 +10,7 @@
 		else if	($school==97)	return 10005	;//
 		else if	($school==39)	return 10017	;//39中
 		else if	($school==06)	return 10025	;//六中
+		else if	($school==25)	return 10009	;//19中
 		else if	($school==19)	return 10029	;//19中
 		else					return 0;		
 	}
@@ -96,5 +97,5 @@
 			echo '学生'.$data->xjh."\t没有绑定卡，嘤嘤嘤\n";
 		
 	}
-	if(($_SERVER['PHP_SELF'])==(end(explode('\\',__FILE__))))
-		printt(chaxun($argv[1]));
+	if(($_SERVER['PHP_SELF'])==(end(explode('\\',__FILE__)))||$_SERVER['PHP_SELF']==__FILE__)
+		printt(chaxun($argv[1],1000,1,(int)$argv[2]));

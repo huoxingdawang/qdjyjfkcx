@@ -3,7 +3,8 @@
 	include_once('db_insert.php');
 	include_once('jry_wb_php_cli_color.php');
 	$conn=jry_wb_connect_database();
-	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? ORDER BY lasttime_query ASC");
+	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? ORDER BY lasttime_query ASC LIMIT 750");
+//	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE birthday IS NULL");
 //	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? AND school=9 ORDER BY lasttime_query ASC");
 //	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE CAST(xjh/100000 AS SIGNED)%100=25 AND lasttime_query<? ORDER BY xjh ASC");
 //	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE xjh=2018370201880230037 AND lasttime_query<? ORDER BY xjh ASC");
@@ -34,6 +35,8 @@
 				$pn++;
 			}
 		}
+		else
+			echo "\n";			
 		$i++;
 		echo jry_wb_php_cli_color(round(($i/$cnt)*100,4)."%\t","green").jry_wb_php_cli_color(((msectime()-$start)/1000)."s\t","red").jry_wb_php_cli_color(((msectime()-$start)/($i/$cnt)*(1-($i/$cnt))/1000)."s left","light_green");
 		echo "\n";
