@@ -1,6 +1,6 @@
 <?php
 	include_once('jry_wb_config_default_user.php');
-	define('JRY_WB_DATABASE_NAME'			,'data');
+	define('JRY_WB_DATABASE_NAME'			,'qiafan');
 	define('JRY_WB_DATABASE_ADDR'			,'127.0.0.1');
 	define('JRY_WB_DATABASE_USER_NAME'		,'ying');
 	define('JRY_WB_DATABASE_USER_PASSWORD'	,'yingyingying');

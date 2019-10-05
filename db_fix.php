@@ -10,7 +10,7 @@
 	$data=$st->fetchAll();
 	echo ($cnt=count($data))." student's logs will be fixed\n";
 	$delta_log=0;
-	$ps=100;
+	$ps=1000;
 	$i=0;
 	function msectime(){list($msec, $sec) = explode(' ', microtime());return (float)sprintf('%.0f',(floatval($msec)+floatval($sec))*1000);}	
 	$start=msectime();	
