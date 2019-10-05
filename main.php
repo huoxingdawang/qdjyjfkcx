@@ -20,6 +20,7 @@
 		$data=(object)[];
 		$data->xjh=$sno;
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/cardInfo');
+curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 		curl_setopt($ch,CURLOPT_HEADER,0);
 		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
@@ -44,6 +45,7 @@
 		$port=$port?$port:getport($sno/100000%100);
 		$logs=[];
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/trades');
+curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 		curl_setopt($ch,CURLOPT_HEADER,0);
 		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
@@ -62,6 +64,7 @@
 		$data=(object)[];
 		$data->xjh=$sno;
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/bankCardInfoFull');
+curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 		curl_setopt($ch,CURLOPT_HEADER,0);
 		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
@@ -101,4 +104,4 @@
 		
 	}
 	if(($_SERVER['PHP_SELF'])==(end(explode('\\',__FILE__)))||$_SERVER['PHP_SELF']==__FILE__)
-		printt(chaxun($argv[1],1000,1,(int)$argv[2]));
+		printt(chaxun($argv[1],1000,1,getport((int)$argv[2])));

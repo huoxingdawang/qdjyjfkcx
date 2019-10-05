@@ -18,7 +18,8 @@
 	while($delta_log&&$run)
 	{
 		$start=msectime();
-		$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? ORDER BY lasttime_query ASC LIMIT 200");
+		$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? ORDER BY RAND() ASC LIMIT 400");
+//		$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? ORDER BY lasttime_query ASC LIMIT 400");
 		$st->bindValue(1,$start_date);
 		$st->execute();
 		$data=$st->fetchAll();
