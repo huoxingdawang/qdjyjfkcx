@@ -11,15 +11,16 @@
 		$port=0;
 		$stu=NULL;
 		$buff=$ps;
-		$xjh=$argv[1].'37020188'.str_pad($argv[2],2,"0",STR_PAD_LEFT).'30'.str_pad($i,3,"0",STR_PAD_LEFT);
+		if($argv[1]==2017||$argv[1]==2018)
+			$xjh=$argv[1].'37020188'.str_pad($argv[2],2,"0",STR_PAD_LEFT).'30'.str_pad($i,3,"0",STR_PAD_LEFT);
+		else if($argv[1]==2019)
+			$xjh='005'.str_pad($argv[2],2,"0",STR_PAD_LEFT).$argv[1].'00'.str_pad($i,3,"0",STR_PAD_LEFT);
 		echo '学生'.$xjh."\t";
 		$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE xjh=?");
 		$st->bindValue(1,$xjh);
 		$st->execute();
 		if(count($st->fetchAll())==1)
-		{
 			echo jry_wb_php_cli_color('has','green');
-		}
 		else
 		{
 			foreach($schools as $school)
@@ -27,7 +28,7 @@
 					break;
 			if($stu->code)
 			{
-				echo 'from '.($xjh/100000%100).'to '.$school."\n";
+				echo 'from '.getschool($xjh).'to '.$school."\n";
 				db_insert_student($conn,$stu,$school);echo"姓名:".$stu->name."\t卡号:".$stu->card_id."\t余额:".$stu->amount."\t";
 				db_insert_extern($conn,($ex=get_student_extern($xjh,$port)));echo "银行卡号:".$ex->bankcard."\t身份证号:".$ex->china_id_card."\t性别:".($ex->sex?'男':'女')."\t生日:".$ex->birthday."\n";
 				while($buff>=$ps)

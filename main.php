@@ -14,9 +14,24 @@
 		else if	($school==19)	return 10029	;//19中
 		else					return 0;		
 	}
+	function getschool($sno)
+	{
+		if($sno>2017000000000000000)
+			return $sno/100000%100;
+		else
+			return $sno/1000000000%10;
+	}
+	function getsnostr($sno)
+	{
+		if($sno>2017000000000000000)
+			return (string)$sno;
+		else
+			return  str_pad($sno,14,"0", STR_PAD_LEFT); 
+			return $sno/1000000000%10;
+	}	
 	function get_student_basic($sno,$port=0)
 	{
-		$port=$port?$port:getport($sno/100000%100);
+		$port=$port?$port:getport(getschool($sno));
 		$data=(object)[];
 		$data->xjh=$sno;
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/cardInfo');
@@ -26,7 +41,7 @@ curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
 		curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
 		curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type:application/json'));	
-		curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>$sno,'userType'=>0)));	
+		curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>getsnostr($sno),'userType'=>0)));	
 		$get_sorce=curl_exec($ch);	
 		$stu=json_decode($get_sorce);
 		if($stu->data==NULL)
@@ -42,7 +57,7 @@ curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 	}
 	function get_student_logs($sno,$port=0,$ps=1000,$pn=1)
 	{
-		$port=$port?$port:getport($sno/100000%100);
+		$port=$port?$port:getport(getschool($sno));
 		$logs=[];
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/trades');
 curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
@@ -51,7 +66,7 @@ curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
 		curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
 		curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type:application/json'));	
-		curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>$sno,'userType'=>0,'pageNum'=>$pn,'pageSize'=>$ps)));	
+		curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>getsnostr($sno),'userType'=>0,'pageNum'=>$pn,'pageSize'=>$ps)));	
 		$get_sorce=curl_exec($ch);	
 		$card=json_decode($get_sorce);
 		foreach($card->data->trades as $trade)
@@ -60,7 +75,7 @@ curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 	}
 	function get_student_extern($sno,$port=0)
 	{
-		$port=$port?$port:getport($sno/100000%100);
+		$port=$port?$port:getport(getschool($sno));
 		$data=(object)[];
 		$data->xjh=$sno;
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/bankCardInfoFull');
@@ -70,7 +85,7 @@ curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
 		curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
 		curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type:application/json'));	
-		curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>$sno,'userType'=>0)));	
+		curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode(array('sno'=>getsnostr($sno),'userType'=>0)));	
 		$get_sorce=curl_exec($ch);
 		$stu=json_decode($get_sorce);
 		if($stu->data==NULL)
@@ -83,7 +98,7 @@ curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 	}
 	function chaxun($sno,$ps=1000,$pn=1,$port=0)
 	{
-		$port=$port?$port:getport($sno/100000%100);
+		$port=$port?$port:getport(getschool($sno));
 		$data=get_student_basic($sno,$port);
 		$data->logs=get_student_logs($sno,$port,$ps,$pn);
 		return (object)array_merge((array)$data,(array)get_student_extern($sno,$port));

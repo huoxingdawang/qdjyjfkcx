@@ -17,7 +17,7 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 			$st->bindValue(4,$stu->amount);
 			$st->bindValue(5,jry_wb_get_time());
 			$st->bindValue(6,jry_wb_get_time());
-			$st->bindValue(7,($school==0?$stu->xjh/100000%100:$school));
+			$st->bindValue(7,($school==0?getschool($stu->xjh):$school));
 			$st->bindValue(8,$stu->amount);
 			$st->bindValue(9,jry_wb_get_time());
 			$st->bindValue(10,$stu->amount);
