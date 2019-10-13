@@ -1,6 +1,9 @@
 <?php
 	error_reporting(0);
 	include_once('jry_wb_tools/jry_wb_test_china_id_card.php');
+//	$daili="218.75.102.198:8000";
+//	$daili="149.129.98.81:80";
+	$daili="127.0.0.1:1080";
 	function getport($school)
 	{
 		if	($school==1)		return 10013	;//一中
@@ -18,24 +21,31 @@
 	{
 		if($sno>2017000000000000000)
 			return $sno/100000%100;
-		else
+		else if($sno>=501201900001&&$sno<=501201900999)
 			return $sno/1000000000%10;
+		else if($sno>=191000101&&$sno<=199000999)
+			return 2;
+		return 0;
 	}
 	function getsnostr($sno)
 	{
 		if($sno>2017000000000000000)
 			return (string)$sno;
-		else
+		else if($sno>=501201900001&&$sno<=501201900999)
 			return  str_pad($sno,14,"0", STR_PAD_LEFT); 
-			return $sno/1000000000%10;
-	}	
+		else if($sno>=191000101&&$sno<=199000999)
+			return (string)$sno;
+		return (string)$sno;
+	}
 	function get_student_basic($sno,$port=0)
 	{
+		global $daili;
 		$port=$port?$port:getport(getschool($sno));
 		$data=(object)[];
 		$data->xjh=$sno;
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/cardInfo');
-curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
+		if($daili!='')
+			curl_setopt($ch,CURLOPT_PROXY,$daili);
 		curl_setopt($ch,CURLOPT_HEADER,0);
 		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
@@ -57,10 +67,12 @@ curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 	}
 	function get_student_logs($sno,$port=0,$ps=1000,$pn=1)
 	{
+		global $daili;
 		$port=$port?$port:getport(getschool($sno));
 		$logs=[];
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/trades');
-curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
+		if($daili!='')
+			curl_setopt($ch,CURLOPT_PROXY,$daili);
 		curl_setopt($ch,CURLOPT_HEADER,0);
 		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
@@ -75,11 +87,13 @@ curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
 	}
 	function get_student_extern($sno,$port=0)
 	{
+		global $daili;
 		$port=$port?$port:getport(getschool($sno));
 		$data=(object)[];
 		$data->xjh=$sno;
 		$ch=curl_init('http://27.221.57.108:'.$port.'/app/bankCardInfoFull');
-curl_setopt($ch,CURLOPT_PROXY,"127.0.0.1:1080");
+		if($daili!='')
+			curl_setopt($ch,CURLOPT_PROXY,$daili);
 		curl_setopt($ch,CURLOPT_HEADER,0);
 		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 

@@ -8,7 +8,7 @@
 	$run=true;
 	$per_time=0.75;
 	$big_time=60;
-	$start_date=$argv[1]==''?jry_wb_get_time():$argv[1];
+	$start_date=$argv[2]==''?jry_wb_get_time():$argv[2];
 	echo 'Limit time '.$start_date."\n";
 	$st=$conn->prepare("SELECT count(`xjh`) FROM `qiafan`.`student` WHERE lasttime_query<?");
 	$st->bindValue(1,$start_date);
@@ -18,8 +18,9 @@
 	while($delta_log&&$run)
 	{
 		$start=msectime();
-		$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? ORDER BY lasttime_query ASC LIMIT 200");
+		$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? ORDER BY rand() ASC LIMIT ?,200");
 		$st->bindValue(1,$start_date);
+		$st->bindValue(2,$argv[1]??0);
 		$st->execute();
 		$data=$st->fetchAll();
 		echo ($cnt=count($data))." will be updated\n";

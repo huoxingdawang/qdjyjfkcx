@@ -5,12 +5,12 @@
 	$conn=jry_wb_connect_database();	
 	$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`amount_logs`=ROUND(IFNULL((SELECT SUM(`qiafan`.`logs`.`amount`) FROM `qiafan`.`logs` WHERE `qiafan`.`logs`.`xjh`=`qiafan`.`student`.`xjh`),0),2);");
 	$st->execute();
-	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE `amount`!=`amount_logs`");
+	$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE `amount`!=`amount_logs` ORDER BY rand()");
 	$st->execute();
 	$data=$st->fetchAll();
 	echo ($cnt=count($data))." student's logs will be fixed\n";
 	$delta_log=0;
-	$ps=1000;
+	$ps=100;
 	$i=0;
 	function msectime(){list($msec, $sec) = explode(' ', microtime());return (float)sprintf('%.0f',(floatval($msec)+floatval($sec))*1000);}	
 	$start=msectime();	
