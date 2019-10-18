@@ -6,7 +6,7 @@
 知道学籍号即可查询
 
 ## 使用方法
-自行安装PHP，并打开CURL扩展
+自行安装PHP，并打开CURL,PDO扩展
 
 然后
 ```bash
@@ -21,28 +21,31 @@ php main.php 2017370201880930***
 查询学籍号为2017370201880930**的交易记录
 
 ## 一些扩展
-### 查询好几个
-```bash
-php chahaojige.php JSON数据包
-```
-### 批量打捞qdez高二数据包
-```bash
-php test.php
-```
-### 分析数据包
-```bash
-php fenxi.php 文件名
-```
-### 查找数据
-```bash
-php find.php 人名 文件名
-```
-### 读取数据
-```bash
-php read.php 文件名
+### 使用已经搞好的数据库
+修改\jry_wb_configs\jry_wb_config_database_user.php
+```php
+<?php
+	include_once('jry_wb_config_default_user.php');
+	define('JRY_WB_DATABASE_NAME'			,'qiafan');
+	define('JRY_WB_DATABASE_ADDR'			,'juruoyun.top');
+	define('JRY_WB_DATABASE_USER_NAME'		,'qiafan');
+	define('JRY_WB_DATABASE_USER_PASSWORD'	,'qiafan');
+	define('JRY_WB_DATABASE_ALL_PREFIX'		,'');
+?>
 ```
 
+然后
 
+```bash
+php db_find.php [-data][-logs] [name/xjh] balabalabala
+```
+比如
+```bash
+php db_find.php -data-logs name "丁宁"
+```
+可以查询 丁宁 同志的信息和交易记录
+
+注:我也不知道这是谁。。。。
 
 差不多这样？
 
