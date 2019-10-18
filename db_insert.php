@@ -10,45 +10,42 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 	{
 		if($stu->xjh!==NULL&&$stu->name!==NULL&&$stu->card_id!==NULL&&$stu->amount!==NULL)
 		{
-			$st = $conn->prepare("INSERT INTO qiafan.student (`xjh`,`name`,`card_id`,`amount`,`lasttime`,`lasttime_query`,`school`) VALUES (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE lasttime=IF(amount=?,lasttime,?),amount=?,lasttime_query=?;");
+			$st = $conn->prepare("INSERT INTO qiafan.student (`xjh`,`name`,`card_id`,`amount`,`lasttime_query`,`school`) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE amount=?,lasttime_query=?;");
 			$st->bindValue(1,$stu->xjh);
 			$st->bindValue(2,$stu->name);
 			$st->bindValue(3,$stu->card_id);
 			$st->bindValue(4,$stu->amount);
 			$st->bindValue(5,jry_wb_get_time());
-			$st->bindValue(6,jry_wb_get_time());
-			$st->bindValue(7,($school==0?getschool($stu->xjh):$school));
-			$st->bindValue(8,$stu->amount);
-			$st->bindValue(9,jry_wb_get_time());
-			$st->bindValue(10,$stu->amount);
-			$st->bindValue(11,jry_wb_get_time());
+			$st->bindValue(6,($school==0?getschool($stu->xjh):$school));
+			$st->bindValue(7,$stu->amount);
+			$st->bindValue(8,jry_wb_get_time());
 			$st->execute();
 		}			
 	}
-	function db_insert_logs($conn,$xjh,$logs,$rand=false)
+	function db_insert_logs($conn,$xjh,$logs,$rand=false,$check_point='1926-08-17 00:00:00')
 	{
 		$delta_log=0;
 		foreach($logs as $log)
 		{
-			$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,0);");
+			if($log->time<$check_point)
+				return 0;
+			$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`tmp`) VALUES (?,?,?,?,?,0);");
 			$st->bindValue(1,$xjh);
 			$st->bindValue(2,$log->amount);
 			$st->bindValue(3,$log->time);
 			$st->bindValue(4,$log->consumtype);
 			$st->bindValue(5,$log->mercname);
-			$st->bindValue(6,jry_wb_get_time());
 			$st->execute();
 			$delta_log+=$aaaa=$st->rowCount();
 			if($aaaa==0&&$rand)
 			{
-				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`lasttime`,`tmp`) VALUES (?,?,?,?,?,?,?) ");
+				$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`tmp`) VALUES (?,?,?,?,?,?) ");
 				$st->bindValue(1,$xjh);
 				$st->bindValue(2,$log->amount);
 				$st->bindValue(3,$log->time);
 				$st->bindValue(4,$log->consumtype);
 				$st->bindValue(5,$log->mercname);
-				$st->bindValue(6,jry_wb_get_time());
-				$st->bindValue(7,rand(1,1000));
+				$st->bindValue(6,rand(1,1000));
 				$st->execute();					
 				$delta_log+=$aaaa=$st->rowCount();
 			}

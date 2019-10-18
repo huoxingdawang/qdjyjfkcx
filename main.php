@@ -3,7 +3,7 @@
 	include_once('jry_wb_tools/jry_wb_test_china_id_card.php');
 //	$daili="218.75.102.198:8000";
 //	$daili="149.129.98.81:80";
-	$daili="127.0.0.1:1080";
+//	$daili="127.0.0.1:1080";
 	function getport($school)
 	{
 		if	($school==1)		return 10013	;//一中
@@ -13,7 +13,6 @@
 		else if	($school==97)	return 10005	;//
 		else if	($school==39)	return 10017	;//39中
 		else if	($school==06)	return 10025	;//六中
-		else if	($school==25)	return 10009	;//19中
 		else if	($school==19)	return 10029	;//19中
 		else					return 0;		
 	}

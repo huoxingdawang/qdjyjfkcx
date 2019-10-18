@@ -9,13 +9,13 @@
 			'bind'					=>'http://27.221.57.108:'.$port.'/app/user/bind',						//绑定
 		],
 		//绑卡
-		'cardInfo'					=>'http://27.221.57.108:'.$port.'/app/cardInfo',						//首页接口,
-		'bankCardInfo'				=>'http://27.221.57.108:'.$port.'/app/bankCardInfo',					//绑定银行卡,
+//		'cardInfo'					=>'http://27.221.57.108:'.$port.'/app/cardInfo',						//首页接口,
+//		'bankCardInfo'				=>'http://27.221.57.108:'.$port.'/app/bankCardInfo',					//绑定银行卡,
 //		'bindingBank'				=>'http://27.221.57.108:'.$port.'/app/bindingBank',						//绑定银行卡,
 //		'recharge'					=>'http://27.221.57.108:'.$port.'/app/recharge',						//一卡通充值
-		'cardlist'					=>'http://27.221.57.108:'.$port.'/app/list',							//一卡通信息列表
-		'trades'					=>'http://27.221.57.108:'.$port.'/app/trades',							//流水
-		'bankCardInfoFull'			=>'http://27.221.57.108:'.$port.'/app/bankCardInfoFull',				//穫取卡完整信息
+//		'cardlist'					=>'http://27.221.57.108:'.$port.'/app/list',							//一卡通信息列表
+//		'trades'					=>'http://27.221.57.108:'.$port.'/app/trades',							//流水
+//		'bankCardInfoFull'			=>'http://27.221.57.108:'.$port.'/app/bankCardInfoFull',				//穫取卡完整信息
 //		'unBindingBank'				=>'http://27.221.57.108:'.$port.'/Leave/unBindingBank',					//解绑
 		'login'=>
 		[

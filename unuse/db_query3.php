@@ -24,8 +24,8 @@
 	
 	$child_list=[];
 	$redis = new Redis;
-	$conn=jry_wb_connect_database();	
 	$redis->connect("127.0.0.1",6379);
+	$conn=jry_wb_connect_database();	
 	$max_child_num=100;
 	$once=200;
 	$start_date=$argv[1]==''?jry_wb_get_time():$argv[1];
@@ -35,7 +35,7 @@
 		echo ($child_num=$max_child_num)."\t".$redis->lLen('task')."\n";
 		if($redis->lLen('task')<(2*($child_num+1)))
 		{
-			$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? ORDER BY lasttime_query ASC LIMIT ?,200");
+			$st=$conn->prepare("SELECT `xjh`,`school` FROM `qiafan`.`student` WHERE lasttime_query<? AND `amount_logs`=`amount` ORDER BY lasttime_query ASC LIMIT ?,200");
 			$st->bindValue(1,$start_date);
 			$st->bindValue(2,$redis->lLen('task'));
 			$st->execute();
