@@ -28,7 +28,7 @@ SELECT `qiafan`.`student`.`xjh`,`qiafan`.`student`.`name`,`qiafan`.`logs`.`amoun
 		foreach($logs as $log)
 		{
 			if($log->time<$check_point)
-				return 0;
+				return $delta_log;
 			$st=$conn->prepare("INSERT INTO qiafan.logs (`xjh`,`amount`,`time`,`consumtype`,`mercname`,`tmp`) VALUES (?,?,?,?,?,0);");
 			$st->bindValue(1,$xjh);
 			$st->bindValue(2,$log->amount);

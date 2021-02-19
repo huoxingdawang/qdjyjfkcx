@@ -1,9 +1,9 @@
 <?php
 	include_once('jry_wb_config_default_user.php');
 	define('JRY_WB_DATABASE_NAME'			,'qiafan');
-	define('JRY_WB_DATABASE_ADDR'			,'127.0.0.1');
-	define('JRY_WB_DATABASE_USER_NAME'		,'ying');
-	define('JRY_WB_DATABASE_USER_PASSWORD'	,'yingyingying');
+	define('JRY_WB_DATABASE_ADDR'			,'host.vm.hxdw.juruoyun.top');
+	define('JRY_WB_DATABASE_USER_NAME'		,'qiafan');
+	define('JRY_WB_DATABASE_USER_PASSWORD'	,'qiafan');
 	define('JRY_WB_DATABASE_ALL_PREFIX'		,'');
 	
 	define('JRY_WB_REDIS_ADDR'				,'');		//REDIS数据库位置

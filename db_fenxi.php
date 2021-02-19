@@ -30,12 +30,15 @@
 	$stus=$st->fetchAll();
 	fwrite($file,'<span>包含'.($stucnt=count($stus)).'个学生,');	
 	echo ((msectime()-$start)/1000)."s passed(student loaded)\n";
-	$st=$conn->prepare("SELECT COUNT(xjh) FROM `qiafan`.`logs`");
+	$st=$conn->prepare("SELECT `xjh`,`time`,`amount`,`consumtype`,`mercname` FROM `qiafan`.`logs` ORDER BY `xjh`");
 	$st->execute();
-	$logscnt=$st->fetchAll()[0][0];	
-	fwrite($file,''.$logscnt.'条记录</span>');	
+	$logs=$st->fetchAll();
+	fwrite($file,''.($logscnt=count($logs)).'条记录</span>');
+//预处理
+	$xjh2school=[];
+	foreach($stus as $stu)
+		$xjh2school[$stu['xjh']]=$stu['school'];
 //学生分析
-	echo ((msectime()-$start)/1000)."s passed(logs loaded)\n";
 	fwrite($file,'<h2>2:学生分析</h2>');
 	$stuself=[];
 	$stupren=[];
@@ -102,7 +105,7 @@
 	fwrite($file,'<h2>4:借读大军分析</h2>');
 	$jiedu=0;$from=[];$to=[];
 	foreach($stus as $stu)
-		if($stu['xjh']/100000%100!=$stu['school'])
+		if(getschool($stu['xjh'])!=$stu['school'])
 		{
 			$jiedu++;
 			if($from[''.$stu['xjh']/100000%100]==NULL)
@@ -124,7 +127,46 @@
 		fwrite($file,'<tr><td>'.$sch.'</td><td>'.$num.'</td></tr>');
 	fwrite($file,'</table>');		
 	echo ((msectime()-$start)/1000)."s passed(借读大军分析完毕)\n";	
-
+//人名分析
+	fwrite($file,'<h2>5:人名分析</h2>');
+	$name=[];
+	foreach($stus as $stu)
+		if($name[$stu['name']]==NULL)
+			$name[$stu['name']]=1;
+		else
+			$name[$stu['name']]++;	
+	arsort($name);
+	fwrite($file,'<div style="height:200px;overflow-y: scroll;width: 200px;"><table border="2"><tr><td>日期</td><td>人数</td></tr>');
+	foreach($name as $bir=>$num)
+		if($num<=1)
+			break;
+		else
+			fwrite($file,'<tr><td>'.$bir.'</td><td>'.$num.'</td></tr>');
+	fwrite($file,'</table></div>');
+	$name=NULL;
+	echo ((msectime()-$start)/1000)."s passed(人名分析完毕)\n";	
+//交♂易分析
+	fwrite($file,'<h2>6:交♂易分析</h2>');
+	$area=[];
+	foreach($logs as $log)
+	{
+		$key=$xjh2school[$log['xjh']].'-'.$log['mercname'];
+		if($area[$key]==NULL)
+			$area[$key]=array("total"=>abs($log['amount']),"average"=>abs($log['amount']));
+		else
+		{
+			$area[$key]['total']+=abs($log['amount']);	
+			$area[$key]['average']=($area[$key]['average']+abs($log['amount']))/2;
+		}
+	}
+	fwrite($file,'<div style=""><table border="2"><tr><td>地点</td><td>金额</td><td>均值</td></tr>');
+	foreach($area as $bir=>$num)
+			fwrite($file,'<tr><td>'.$bir.'</td><td>'.$num['total'].'</td><td>'.$num['average'].'</td></tr>');
+	fwrite($file,'</table></div>');
+	$area=NULL;
+	
+	echo ((msectime()-$start)/1000)."s passed(交♂易分析完毕)\n";
+	
 
 
 

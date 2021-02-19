@@ -47,7 +47,7 @@
 		{
 			echo "姓名:".jry_wb_php_cli_color($one['name'],'yellow')."\t学籍号:".jry_wb_php_cli_color($one['xjh'],'light_blue')."\t余额:".jry_wb_php_cli_color($one['amount'],'magenta')."\t交易绝对值:".$one['amount_abs']."\n";
 			echo "银行卡号:".$one['bankcard']."\t身份证号:".jry_wb_php_cli_color($one['china_id_card'],'cyan')."\t性别:".jry_wb_php_cli_color(($one['sex']?'男':'女'),'green')."\t生日:".$one['birthday']."\n";
-			echo "最后更新时间:".$one['lasttime']."\t最后请求时间:".$one['lasttime_query']."\t在读学校:".$one['school']."\t学籍学校:".getschool($one['xjh'])."\n";
+			echo "最后更新时间:".$one['lasttime']."\t最后请求时间:".$one['lasttime_query']."\t检查点:".$one['check_point']."\t在读学校:".$one['school']."\t学籍学校:".getschool($one['xjh'])."\n";
 		}
 		if(strpos($argv[1],'-logs')!==FALSE)
 		{
@@ -56,8 +56,14 @@
 			$st->execute();
 			$logs=$st->fetchAll();		
 			echo '交易记录如下:(共'.jry_wb_php_cli_color(count($logs),'light_red')."条)\n";
+			$tmp=[];
 			foreach($logs as $log)
+			{
 				echo jry_wb_php_cli_color($one['name'],'yellow')."\t".$log['time']."\t".$log['consumtype']."\t".$log['amount']."元\t".$log['mercname']."\n";
+				$tmp[]=array('name'=>$one['name'],'time'=>$log['time'],'consumtype'=>$log['consumtype'],'amount'=>$log['amount'],'mercname'=>$log['mercname']);
+			}
+			$file=fopen('tmp.json', "w");
+			fwrite($file,json_encode($tmp));
 		}
 		sleep(1);
 		echo "\n";

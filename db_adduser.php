@@ -14,6 +14,11 @@
 			$xjh='005'.str_pad($argv[2],2,"0",STR_PAD_LEFT).$argv[1].'00'.str_pad($i,3,"0",STR_PAD_LEFT);
 		else if($argv[1]==2019&&$argv[2]==2)
 			$xjh='19'.str_pad(((int)($i/60/7))+1,1,'0',STR_PAD_LEFT).'000'.str_pad(((int)($i/60%7))+1,1,'0',STR_PAD_LEFT).str_pad($i%60+1,2,'0',STR_PAD_LEFT);
+		else if($argv[1]==2020&&$argv[2]==1)
+			$xjh='005'.str_pad($argv[2],2,"0",STR_PAD_LEFT).$argv[1].'00'.str_pad($i,3,"0",STR_PAD_LEFT);
+		else if($argv[1]==2020&&$argv[2]==2)
+			$xjh='20'.str_pad(((int)($i/60/7))+1,1,'0',STR_PAD_LEFT).'000'.str_pad(((int)($i/60%7))+1,1,'0',STR_PAD_LEFT).str_pad($i%60+1,2,'0',STR_PAD_LEFT);
+
 		echo $i.':学生'.$xjh."\t";
 		$stu=get_student_basic($xjh,getport($argv[2]));
 		if($stu->code)

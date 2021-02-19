@@ -3,11 +3,12 @@
 	include_once('jry_wb_tools/jry_wb_test_china_id_card.php');
 //	$daili="218.75.102.198:8000";
 //	$daili="149.129.98.81:80";
-//	$daili="127.0.0.1:1080";
+//	$daili="192.168.56.1:7890";
 	function getport($school)
 	{
 		if	($school==1)		return 10013	;//一中
 		else if	($school==2)	return 10009	;//二中
+		else if	($school==25)	return 10009	;//二中
 		else if	($school==15)	return 9000		;//十五中
 		else if	($school==9)	return 10021	;//九中
 		else if	($school==97)	return 10005	;//
@@ -46,7 +47,7 @@
 		if($daili!='')
 			curl_setopt($ch,CURLOPT_PROXY,$daili);
 		curl_setopt($ch,CURLOPT_HEADER,0);
-		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
+		curl_setopt($ch, CURLOPT_TIMEOUT,10); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
 		curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
 		curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type:application/json'));	
@@ -73,7 +74,7 @@
 		if($daili!='')
 			curl_setopt($ch,CURLOPT_PROXY,$daili);
 		curl_setopt($ch,CURLOPT_HEADER,0);
-		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
+		curl_setopt($ch, CURLOPT_TIMEOUT,10); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
 		curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
 		curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type:application/json'));	
@@ -94,7 +95,7 @@
 		if($daili!='')
 			curl_setopt($ch,CURLOPT_PROXY,$daili);
 		curl_setopt($ch,CURLOPT_HEADER,0);
-		curl_setopt($ch, CURLOPT_TIMEOUT,30); 
+		curl_setopt($ch, CURLOPT_TIMEOUT,10); 
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1); 
 		curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
 		curl_setopt($ch,CURLOPT_HTTPHEADER,array('Content-Type:application/json'));	
@@ -131,5 +132,5 @@
 			echo '学生'.$data->xjh."\t没有绑定卡，嘤嘤嘤\n";
 		
 	}
-	if(($_SERVER['PHP_SELF'])==(end(explode('\\',__FILE__)))||$_SERVER['PHP_SELF']==__FILE__)
-		printt(chaxun($argv[1],1000,1,getport((int)$argv[2])));
+	if(($_SERVER['PHP_SELF'])==(end(explode('/',__FILE__)))||$_SERVER['PHP_SELF']==__FILE__)
+		printt(chaxun($argv[1],100,1,getport((int)$argv[2])));

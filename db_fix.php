@@ -5,12 +5,12 @@
 	$conn=jry_wb_connect_database();	
 	$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`amount_logs`=ROUND(IFNULL((SELECT SUM(`qiafan`.`logs`.`amount`) FROM `qiafan`.`logs` WHERE `qiafan`.`logs`.`xjh`=`qiafan`.`student`.`xjh`),0),2);");
 	$st->execute();
-	$st=$conn->prepare("SELECT `xjh`,`school`,`check_point` FROM `qiafan`.`student` WHERE `amount`!=`amount_logs` ORDER BY rand()");
+	$st=$conn->prepare("SELECT `xjh`,`school`,`check_point` FROM `qiafan`.`student` WHERE `amount`!=`amount_logs` ORDER BY xjh");
 	$st->execute();
 	$data=$st->fetchAll();
 	echo ($cnt=count($data))." student's logs will be fixed\n";
 	$delta_log=0;
-	$ps=100;
+	$ps=500;
 	$i=0;
 	function msectime(){list($msec, $sec) = explode(' ', microtime());return (float)sprintf('%.0f',(floatval($msec)+floatval($sec))*1000);}	
 	$start=msectime();	
@@ -19,7 +19,7 @@
 		if(!file_exists('run'))
 			break;
 		echo 'fixing '.$one['xjh']."\n";
-		$st=$conn->prepare("DELETE  FROM `qiafan`.`logs` WHERE `xjh`=? AND `time`>?;");
+		$st=$conn->prepare("DELETE  FROM `qiafan`.`logs` WHERE `xjh`=? AND `time`>=?;");
 		$st->bindValue(1,$one['xjh']);
 		$st->bindValue(2,$one['check_point']);
 		$st->execute();
@@ -41,9 +41,9 @@
 			$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`amount_logs`=ROUND(IFNULL((SELECT SUM(`qiafan`.`logs`.`amount`) FROM `qiafan`.`logs` WHERE `qiafan`.`logs`.`xjh`=`qiafan`.`student`.`xjh`),0),2) WHERE `xjh`=?;");
 			$st->bindValue(1,$one['xjh']);
 			$st->execute();
-			$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`lasttime`=IFNULL((SELECT MAX(`qiafan`.`logs`.`time`) FROM `qiafan`.`logs` WHERE `qiafan`.`logs`.`xjh`=`qiafan`.`student`.`xjh`),'1926-08-17 00:00:00') WHERE `qiafan`.`student`.`xjh`=?;");
-			$st->bindValue(1,$one['xjh']);
-			$st->execute();			
+//			$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`lasttime`=IFNULL((SELECT MAX(`qiafan`.`logs`.`time`) FROM `qiafan`.`logs` WHERE `qiafan`.`logs`.`xjh`=`qiafan`.`student`.`xjh`),'1926-08-17 00:00:00') WHERE `qiafan`.`student`.`xjh`=?;");
+//			$st->bindValue(1,$one['xjh']);
+//			$st->execute();			
 			$st=$conn->prepare("UPDATE `qiafan`.`student` SET `qiafan`.`student`.`check_point`=IF(`qiafan`.`student`.`amount`=`qiafan`.`student`.`amount_logs`,`qiafan`.`student`.`lasttime`,'1926-08-17 00:00:00') WHERE `qiafan`.`student`.`xjh`=?;");
 			$st->bindValue(1,$one['xjh']);
 			$st->execute();		
